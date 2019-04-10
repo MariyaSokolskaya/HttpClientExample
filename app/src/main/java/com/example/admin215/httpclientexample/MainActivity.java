@@ -14,6 +14,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -71,8 +74,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            surname.setText(httpAnswer);
-            name.setText(httpAnswer);
+            try {
+                JSONArray weather = new JSONArray(httpAnswer);
+                JSONObject weatherObj = weather.getJSONObject(0);
+                String temp = weatherObj.getString("temp");
+                String feel = weatherObj.getString("feel");
+                surname.setText("Температура на 00:00 - " + temp);
+                name.setText("Температура на 00:00 ощущается как - " + feel);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
         }
     }
 }
